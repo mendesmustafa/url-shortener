@@ -1,6 +1,6 @@
 package com.mendes.security;
 
-import com.mendes.model.User;
+import com.mendes.model.dto.UserDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -17,7 +17,7 @@ import java.util.function.Function;
 @Service
 public class JwtTokenUtil {
 
-    public static final long ACCESS_TOKEN_VALIDITY_SECONDS = 24 * 60 * 60 * 1000;
+    public static final long ACCESS_TOKEN_VALIDITY_SECONDS = 24 * 60 * 60 * 1_000L;
     public static final String SIGNING_KEY = "mendes";
 
     public String getUsernameFromToken(String token) {
@@ -45,8 +45,8 @@ public class JwtTokenUtil {
         return expiration.before(new Date());
     }
 
-    public String generateToken(User user) {
-        return doGenerateToken(user.getUsername());
+    public String generateToken(UserDto userDto) {
+        return doGenerateToken(userDto.getUsername());
     }
 
     private String doGenerateToken(String username) {

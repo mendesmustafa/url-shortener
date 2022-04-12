@@ -1,6 +1,6 @@
 package com.mendes.repository;
 
-import com.mendes.model.Url;
+import com.mendes.model.entity.Url;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,6 +15,6 @@ import java.util.List;
 @Repository
 public interface UrlRepository extends JpaRepository<Url, Long> {
 
-    @Query("SELECT u FROM Url u WHERE u.shortUrl = :shortUrl")
+    @Query("SELECT u FROM Url u WHERE lower(TRIM(u.shortUrl)) LIKE lower(CONCAT('%',:shortUrl,'%'))")
     List<Url> findByShortUrl(@Param("shortUrl") String shortUrl);
 }

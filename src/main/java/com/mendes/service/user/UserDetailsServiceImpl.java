@@ -1,7 +1,7 @@
-package com.mendes.service;
+package com.mendes.service.user;
 
-import com.mendes.model.User;
-import com.mendes.model.UserInfoDetails;
+import com.mendes.model.dto.UserInfoDetails;
+import com.mendes.model.dto.UserDto;
 import com.mendes.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,8 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -24,7 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+        UserDto user = userRepository.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("not found : " + username);
         }

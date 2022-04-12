@@ -1,30 +1,27 @@
-package com.mendes.model;
+package com.mendes.model.dto;
 
-import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * @author mendes
+ * @author mendesmustafa on 24-02-2022
  */
 
-@Entity
-@Table(name = "USERS")
-public class User implements Serializable {
+public class UserDto implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "USERS_ID_SEQ")
-    @SequenceGenerator(name = "USERS_ID_SEQ", allocationSize = 1)
-    @Column(name = "ID")
     private Long id;
-
-    @Column(name = "NAME")
     private String name;
-
-    @Column(name = "USERNAME", unique = true)
     private String username;
-
-    @Column(name = "PASSWORD")
     private String password;
+
+    public UserDto() {
+    }
+
+    public UserDto(Long id, String name, String username, String password) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
+        this.password = password;
+    }
 
     public Long getId() {
         return id;

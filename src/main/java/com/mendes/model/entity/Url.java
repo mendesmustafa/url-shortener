@@ -1,4 +1,4 @@
-package com.mendes.model;
+package com.mendes.model.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,7 +14,6 @@ public class Url implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "URL_ID_SEQ")
     @SequenceGenerator(name = "URL_ID_SEQ", allocationSize = 1)
-    @Column(name = "ID")
     private Long id;
 
     @Column(name = "FULL_URL")

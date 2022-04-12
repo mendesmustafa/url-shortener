@@ -1,4 +1,4 @@
-package com.mendes.model;
+package com.mendes.model.dto;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,9 +11,9 @@ import java.util.Collection;
 
 public class UserInfoDetails implements UserDetails {
 
-    private User user;
+    private final UserDto user;
 
-    public UserInfoDetails(User user) {
+    public UserInfoDetails(UserDto user) {
         this.user = user;
     }
 

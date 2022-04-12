@@ -1,6 +1,6 @@
 package com.mendes.security;
 
-import com.mendes.service.UserDetailsServiceImpl;
+import com.mendes.service.user.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,11 +26,9 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private UserDetailsServiceImpl userDetailsService;
-
-    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     public WebSecurityConfiguration(UserDetailsServiceImpl userDetailsService, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint, JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.userDetailsService = userDetailsService;
@@ -57,7 +55,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
         http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers("/user/save", "/user/token").permitAll()
                 .anyRequest().authenticated()

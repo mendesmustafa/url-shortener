@@ -1,7 +1,7 @@
 package com.mendes.controller;
 
-import com.mendes.model.Url;
-import com.mendes.service.UrlService;
+import com.mendes.model.dto.UrlDto;
+import com.mendes.service.url.UrlServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -9,19 +9,21 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author mendes
  */
 
-@Api(value = "url")
 @RestController
 @RequestMapping("url")
+@Api(value = "url")
 public class UrlController {
 
-    private UrlService urlService;
+    private final UrlServiceImpl urlServiceImpl;
 
-    public UrlController(UrlService urlService) {
-        this.urlService = urlService;
+    public UrlController(UrlServiceImpl urlServiceImpl) {
+        this.urlServiceImpl = urlServiceImpl;
     }
 
     @ApiOperation(value = "save")
@@ -32,8 +34,8 @@ public class UrlController {
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @PostMapping("/save")
-    public ResponseEntity save(@RequestBody Url model) {
-        return ResponseEntity.ok(urlService.save(model));
+    public ResponseEntity<UrlDto> save(@RequestBody UrlDto model) {
+        return ResponseEntity.ok(urlServiceImpl.save(model));
     }
 
     @ApiOperation(value = "list")
@@ -44,8 +46,8 @@ public class UrlController {
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @GetMapping("/list")
-    public ResponseEntity list() {
-        return ResponseEntity.ok(urlService.list());
+    public ResponseEntity<List<UrlDto>> list() {
+        return ResponseEntity.ok(urlServiceImpl.list());
     }
 
     @ApiOperation(value = "delete")
@@ -57,7 +59,7 @@ public class UrlController {
     })
     @DeleteMapping("/delete/{id}")
     public void save(@PathVariable("id") Long id) {
-        urlService.delete(id);
+        urlServiceImpl.delete(id);
     }
 
     @ApiOperation(value = "search")
@@ -68,7 +70,7 @@ public class UrlController {
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @PostMapping("/search")
-    public ResponseEntity search(@RequestBody String shortUrl) {
-        return ResponseEntity.ok(urlService.findByShortUrl(shortUrl));
+    public ResponseEntity<UrlDto> search(@RequestBody String shortUrl) {
+        return ResponseEntity.ok(urlServiceImpl.findByShortUrl(shortUrl));
     }
 }

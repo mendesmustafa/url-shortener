@@ -1,9 +1,9 @@
 package com.mendes.controller;
 
-import com.mendes.model.User;
+import com.mendes.model.dto.UserDto;
 import com.mendes.security.JwtAuthenticationFilter;
 import com.mendes.security.JwtTokenUtil;
-import com.mendes.service.UserService;
+import com.mendes.service.user.UserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -18,17 +18,17 @@ import org.springframework.web.bind.annotation.*;
  * @author mendes
  */
 
-@Api(value = "user")
 @RestController
 @RequestMapping("user")
+@Api(value = "user")
 public class UserController {
 
-    private UserService userService;
-    private JwtTokenUtil jwtTokenUtil;
-    private AuthenticationManager authenticationManager;
+    private final UserServiceImpl userServiceImpl;
+    private final JwtTokenUtil jwtTokenUtil;
+    private final AuthenticationManager authenticationManager;
 
-    public UserController(UserService userService, JwtTokenUtil jwtTokenUtil, AuthenticationManager authenticationManager) {
-        this.userService = userService;
+    public UserController(UserServiceImpl userServiceImpl, JwtTokenUtil jwtTokenUtil, AuthenticationManager authenticationManager) {
+        this.userServiceImpl = userServiceImpl;
         this.jwtTokenUtil = jwtTokenUtil;
         this.authenticationManager = authenticationManager;
     }
@@ -41,8 +41,8 @@ public class UserController {
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @PostMapping("/save")
-    public ResponseEntity save(@RequestBody User model) {
-        return ResponseEntity.ok(userService.save(model));
+    public ResponseEntity<UserDto> save(@RequestBody UserDto model) {
+        return ResponseEntity.ok(userServiceImpl.save(model));
     }
 
     @ApiOperation(value = "token")
@@ -53,16 +53,15 @@ public class UserController {
             @ApiResponse(code = 500, message = "Internal Server Error")
     })
     @PostMapping("/token")
-    public ResponseEntity token(@RequestBody User model) {
+    public ResponseEntity<String> token(@RequestBody UserDto model) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(model.getUsername(), model.getPassword()));
-            User user = userService.findByUsername(model.getUsername());
+            UserDto user = userServiceImpl.findByUsername(model.getUsername());
             String token = jwtTokenUtil.generateToken(user);
             return ResponseEntity.ok(JwtAuthenticationFilter.TOKEN_PREFIX + token);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-
     }
 }
